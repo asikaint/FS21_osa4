@@ -1,3 +1,4 @@
+const { json } = require('express')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -32,10 +33,18 @@ beforeEach(async () => {
 })
 
 test('number of blogs', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(tohavelength(2))
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(2)
 })
+
+// // Tehtävä 4.9
+test('blog id', async () => {
+  const response = await api.get('/api/blogs')
+  const respObj = response.body
+  console.log(response.body.map(body => body.id));
+  expect(response.body.map(body => body.id)[0]).toBeDefined()
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
