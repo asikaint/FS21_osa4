@@ -34,8 +34,7 @@ beforeEach(async () => {
 test('number of blogs', async () => {
   await api
     .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+    .expect(tohavelength(2))
 })
 
 afterAll(() => {
