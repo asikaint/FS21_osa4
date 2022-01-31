@@ -34,7 +34,7 @@ beforeEach(async () => {
 
 test('number of blogs', async () => {
   const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(2)
+  expect(response.body).toHaveLength(initialBlogs.length)
 })
 
 // // Tehtävä 4.9
@@ -45,6 +45,29 @@ test('blog id', async () => {
   expect(response.body.map(body => body.id)[0]).toBeDefined()
 })
 
+// Teht 4.10
+test('add new blog', async () => {
+  const newBlog = {
+    title: "UusiBlogi",
+    author: "TAs",
+    url: "www.tasblog.fi",
+    likes: "1"
+  }
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(initialBlogs.length+1)
+
+  const titles = response.body.map(res => res.title)
+
+  expect(titles).toContain(
+    'UusiBlogi'
+    )
+
+})
 
 afterAll(() => {
   mongoose.connection.close()
