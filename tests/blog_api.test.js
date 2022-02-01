@@ -54,6 +54,15 @@ test('add new blog', async () => {
 //Tee testi, joka varmistaa, että jos kentälle likes ei anneta arvoa, asetetaan sen arvoksi 0. Muiden kenttien sisällöstä ei tässä tehtävässä vielä välitetä.
 // 4.11
 test('add non liked blog', async () => {
+  const newBlog = {
+    title: "nonLikedBlog",
+    author: "NoLikey",
+    url: "www.badblog.fi",
+  }
+  const response = await api.post('/api/blogs')
+    .send(newBlog)
+  expect(response.body.likes).toEqual(0)
+
 
 
 })
