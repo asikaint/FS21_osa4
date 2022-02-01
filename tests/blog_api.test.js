@@ -62,9 +62,16 @@ test('add non liked blog', async () => {
   const response = await api.post('/api/blogs')
     .send(newBlog)
   expect(response.body.likes).toEqual(0)
+})
 
-
-
+test('no author and title', async () => {
+  const newBlog = {
+    url: "www.testing.fi",
+    likes: 1,
+  }
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 afterAll(() => {
