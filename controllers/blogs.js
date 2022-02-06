@@ -21,10 +21,6 @@ blogsRouter.post('/', async (request, response,next) => {
     likes: body.likes || 0,
   })
 
-  console.log(typeof body.title === "undefined");
-
-  console.log(typeof body.author === "undefined");
-
   if (typeof body.author !== "undefined" && typeof body.title !== "undefined") {
     try {
       const result = await blog.save()
@@ -38,5 +34,36 @@ blogsRouter.post('/', async (request, response,next) => {
     });
   }
 })
+
+blogsRouter.delete('/:id', async (request, response,next) => {
+  const blogId = request.params.id
+  try {
+    await Blog.findByIdAndRemove(blogId)
+    response.status(204).end()
+  } catch (exception) {
+    next(exception)
+  }
+
+})
+
+blogsRouter.put('/:id', async (request,response,next) => {
+  const blogId = request.params.id
+  const body = request.body
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+  }
+  try {
+    const doc = await Blog.findByIdAndUpdate(blogId,blog,{new : true})
+    response.json(doc.toJSON())
+  } catch(exception) {
+    next(exception)
+  }
+})
+
+
+
 
 module.exports = blogsRouter
